@@ -1,12 +1,22 @@
-* {
+body, body * {
 	margin: auto;
+	text-align: center;
+	justify-content: center;
 	text-align: center;
 }
 
 body {
 	margin: 2em;
+	flex-direction: column;
 }
 
 #canvas {
 	border: 1px solid black;
+}
+
+#config {
+	margin: 1em;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
 }
