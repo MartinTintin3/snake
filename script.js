@@ -86,6 +86,8 @@ const compare_coords = (a, b) => a.x == b.x && a.y == b.y;
 /** @type {Direction} */
 let direction = "right";
 
+let running = true;
+
 /** @type {Direction | null} */
 let last_used_direction = "right";
 
@@ -111,44 +113,46 @@ const restart = () => {
 }
 
 const update = () => {
-	const last = snake[snake.length - 1];
+	if (running) {
+		const last = snake[snake.length - 1];
 
-	last_snake = snake.map(a => ({ x: a.x, y: a.y }));
+		last_snake = snake.map(a => ({ x: a.x, y: a.y }));
 
-	for (let i = snake.length - 1; i > 0; i--) {
-		snake[i].x = snake[i - 1].x;
-		snake[i].y = snake[i - 1].y;
-	}
+		for (let i = snake.length - 1; i > 0; i--) {
+			snake[i].x = snake[i - 1].x;
+			snake[i].y = snake[i - 1].y;
+		}
 
-	switch(direction) {
-		case "right":
-			snake[0].x++;
-			break;
-		case "left":
-			snake[0].x--;
-			break;
-		case "up":
-			snake[0].y--;
-			break;
-		case "down":
-			snake[0].y++;
-			break;
-	}
+		switch(direction) {
+			case "right":
+				snake[0].x++;
+				break;
+			case "left":
+				snake[0].x--;
+				break;
+			case "up":
+				snake[0].y--;
+				break;
+			case "down":
+				snake[0].y++;
+				break;
+		}
 
-	last_used_direction = direction;
+		last_used_direction = direction;
 
-	if (queued_direction) {
-		direction = queued_direction;
-		queued_direction = null;
-	}
+		if (queued_direction) {
+			direction = queued_direction;
+			queued_direction = null;
+		}
 
-	if (compare_coords(snake[0], apple)) {
-		snake.push({ x: last.x, y: last.y });
-		apple = find_new_apple_location();
-	}
+		if (compare_coords(snake[0], apple)) {
+			snake.push({ x: last.x, y: last.y });
+			apple = find_new_apple_location();
+		}
 
-	if (snake[0].x < 0|| snake[0].y < 0 || snake[0].x >= grid_width || snake[0].y >= grid_height || snake.some((p, i) => i != 0 && p.x == snake[0].x && p.y == snake[0].y)) {
-		restart();
+		if (snake[0].x < 0|| snake[0].y < 0 || snake[0].x >= grid_width || snake[0].y >= grid_height || snake.some((p, i) => i != 0 && p.x == snake[0].x && p.y == snake[0].y)) {
+			restart();
+		}
 	}
 
 	last_update = Date.now();
@@ -203,12 +207,15 @@ document.addEventListener("keydown", e => {
 		case "r":
 			restart();
 			break;
+		case "p":
+			running = !running;
+			break;
 	}
 });
 
 const render = () => {
 	// from 0 to 1
-	const delta = config.smooth ? (Date.now() - last_update) / (1000 / config.speed) : 1;
+	const delta = config.smooth && running ? (Date.now() - last_update) / (1000 / config.speed) : 1;
 
 	ctx.clearRect(0, 0, canvas_width, canvas.height);
 	ctx.fillStyle = "black";

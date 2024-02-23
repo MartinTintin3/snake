@@ -20,3 +20,22 @@ body {
 	flex-direction: column;
 	gap: 10px;
 }
+
+.control-description * {
+	list-style: none;
+	margin-top: 10px;
+}
+
+.control-name {
+	font-weight: bold;
+}
+
+.control-description > p {
+	font-size: 1.2em;
+}
+
+.control-description table, th, tr, td {
+	border: 1px solid black;
+	border-collapse: collapse;
+	padding: 5px;
+}
