@@ -234,6 +234,11 @@ const render = () => {
 		};
 	}
 
+	// score in the top left
+	ctx.fillStyle = "white";
+	ctx.font = "14px Arial";
+	ctx.fillText("Score: " + get_score(), 10, 20);
+
 	requestAnimationFrame(render);
 };
 
